@@ -1,17 +1,15 @@
 import { useState, useEffect } from "react"
-import { useParams, useNavigate } from "react-router-dom" // Import useNavigate
+import { useParams, useNavigate } from "react-router-dom"
 
 function EditUser() {
     const { id } = useParams()
-    const navigate = useNavigate() // Hook for programmatic navigation
+    const navigate = useNavigate()
 
-    // Add states for UX feedback
     const [form, setForm] = useState({ name: "", email: "", phone: "" })
     const [loading, setLoading] = useState(true)
     const [error, setError] = useState(null)
-    const [isSubmitting, setIsSubmitting] = useState(false) // For button feedback
+    const [isSubmitting, setIsSubmitting] = useState(false)
 
-    // 1. Initial Data Fetch (using async/await for better error flow)
     useEffect(() => {
         const fetchUser = async () => {
             setLoading(true)
@@ -27,8 +25,6 @@ function EditUser() {
                 setForm({
                     name: data.name,
                     email: data.email,
-                    // Note: JSONPlaceholder data might not always have 'phone' on the top level, 
-                    // but we'll stick to your form structure.
                     phone: data.phone
                 })
             } catch (err) {
@@ -49,7 +45,6 @@ function EditUser() {
         })
     }
 
-    // 2. Form Submission with Feedback
     async function submit(e) {
         e.preventDefault()
         setIsSubmitting(true)
@@ -66,10 +61,8 @@ function EditUser() {
                 throw new Error(`Update failed with status: ${res.status}`)
             }
 
-            // const data = await res.json() // Not needed unless you check the mocked data
             alert("User updated successfully (simulated)!")
 
-            // Optional: Redirect the user to the detail page or home page
             navigate(`/user/${id}`)
 
         } catch (err) {
@@ -80,7 +73,6 @@ function EditUser() {
         }
     }
 
-    // 3. Conditional Render
     if (loading) {
         return <div className="p-4 text-center">Loading user data... ⏳</div>
     }

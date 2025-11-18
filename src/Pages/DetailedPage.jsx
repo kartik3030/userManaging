@@ -1,9 +1,7 @@
-// DetailedPage.jsx
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 
 const DetailedPage = () => {
-    // Get the dynamic 'id' parameter from the URL path (/user/:id)
     const { id } = useParams();
     const [user, setUser] = useState(null);
     const [loading, setLoading] = useState(true);
@@ -13,7 +11,6 @@ const DetailedPage = () => {
         async function fetchUserDetail() {
             setLoading(true);
             try {
-                // Fetch ONLY the user matching the ID from the URL
                 const res = await fetch(`https://jsonplaceholder.typicode.com/users/${id}`);
                 if (!res.ok) {
                     throw new Error("User not found.");
@@ -27,14 +24,12 @@ const DetailedPage = () => {
             }
         }
         fetchUserDetail();
-    }, [id]); // Refetch if the ID changes
+    }, [id]);
 
     if (loading) return <div className="p-4">Loading user details...</div>;
     if (error) return <div className="p-4 text-red-700">Error: {error}</div>;
-    // Check if user is null (in case of failed fetch/data)
     if (!user) return <div className="p-4">User data not available.</div>;
 
-    // Display the details of the single fetched user
     return (
         <div className="p-4 border rounded shadow-lg bg-white max-w-lg mx-auto mt-8">
             <h2 className="text-3xl font-bold mb-4 border-b pb-2">Details for {user.name}</h2>

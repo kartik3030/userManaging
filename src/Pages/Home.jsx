@@ -2,58 +2,54 @@ import { useEffect, useState } from "react"
 import { Link } from "react-router-dom"
 
 function Home() {
-    // 1. State for data and UX feedback
+    // setting user to null initially
     const [users, setUsers] = useState([])
-    const [loading, setLoading] = useState(true) // Added loading state
-    const [error, setError] = useState(null)     // Added error state
+    // loading if data is not showing
+    const [loading, setLoading] = useState(true)
+    // will set error , initally no error
+    const [error, setError] = useState(null)
 
-    // 2. Fetching User Data with Error Handling
     async function fetchUsers() {
-        setLoading(true); // Start loading before fetch
-        setError(null);   // Clear previous errors
-
+        setLoading(true);
+        setError(null);
+        // try to detch users from API
         try {
             const res = await fetch("https://jsonplaceholder.typicode.com/users");
 
             if (!res.ok) {
-                // Handle non-200 responses (e.g., 404, 500)
                 throw new Error(`Server responded with status: ${res.status}`);
             }
 
             const data = await res.json();
             setUsers(data);
         } catch (err) {
-            // Handle network/CORS issues (TypeError: Failed to fetch)
             console.error("Fetch operation failed:", err);
             setError(`Failed to load users: ${err.message}.`);
         } finally {
-            setLoading(false); // Stop loading regardless of success/fail
+            setLoading(false);
         }
     }
 
-    // 3. Deleting a user (Optimistic UI Update)
+    // deleting a user
     async function deleteUser(id) {
         try {
-            // ⚠️ Note: JSONPlaceholder simulates DELETE, it won't actually remove data.
             await fetch(`https://jsonplaceholder.typicode.com/users/${id}`, {
                 method: "DELETE"
             })
 
-            // Safely update state using the functional form of setState (prevUsers)
             setUsers(prevUsers => prevUsers.filter((u) => u.id !== id))
             alert(`User ${id} deleted (simulated)`);
         } catch (err) {
             console.error("Delete error:", err);
-            alert("Delete failed."); // User feedback for failed delete
+            alert("Delete failed.");
         }
     }
 
-    // 4. useEffect to call fetchUsers on mount
+    // fetch user on reload
     useEffect(() => {
         fetchUsers();
     }, [])
 
-    // 5. Conditional Rendering for UX
     if (loading) {
         return <div className="p-4 text-center text-lg">Loading users... ⏳</div>;
     }
@@ -68,8 +64,6 @@ function Home() {
 
             {users.map((u) => (
                 <div key={u.id} className="p-3 border-b flex justify-between items-center transition duration-150 hover:bg-gray-50">
-
-                    {/* CORRECT LINK: Navigates to /user/[id] for detailed view */}
                     <Link
                         to={`/user/${u.id}`}
                         className="text-blue-600 hover:underline cursor-pointer font-medium text-lg"

@@ -3,7 +3,7 @@ import { Routes, Route, Link } from "react-router-dom"
 import Home from "./Pages/Home.jsx"
 import CreateUser from "./Pages/CreateUser.jsx"
 import EditUser from "./Pages/EditUser.jsx"
-import DetailedPage from "./Pages/DetailedPage.jsx" // Assuming this path is correct
+import DetailedPage from "./Pages/DetailedPage.jsx"
 
 function App() {
   return (
@@ -19,7 +19,6 @@ function App() {
         <Route path="/" element={<Home />} />
         <Route path="/create" element={<CreateUser />} />
         <Route path="/edit/:id" element={<EditUser />} />
-        {/* FIXED: Use dynamic routing '/user/:id' */}
         <Route path="/user/:id" element={<DetailedPage />} />
       </Routes>
     </>
